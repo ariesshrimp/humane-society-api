@@ -19,7 +19,9 @@ const {
      getOlderThan, 
      sortByAvailable,
      getWithImage,
-     getByBreed
+     getByBreed,
+     getFriends,
+     getWithFriends
 } = require('./data.js')
 
 /** 
@@ -38,6 +40,19 @@ const {
  *  description: String
  *  adopt_fee: Float
  *  breed: String
+ *  friends: [Animal]
+ * }
+ * 
+ * type User {
+ *  id: String!
+ *  name: String!
+ *  date_joined: String
+ *  email: String,
+ *  password: String,
+ *  favorites: [Animal]
+ *  notifications:
+ *      frequency: Enum
+ *      filters: Enum
  * }
 */
 
@@ -92,6 +107,11 @@ const animalType = new GraphQLObjectType({
         breed: {
             type: GraphQLString,
             description: `The arbitrary breed of species.`
+        },
+        friends: {
+            type: new GraphQLList(animalType),
+            description: `A list of friends the animal has from their previous home, or while living in the shelter.`,
+            resolve: animal => getFriends(animal)
         }
     })
 })
@@ -187,6 +207,10 @@ const queryType = new GraphQLObjectType({
                 }
             },
             resolve: (root, { breed }) => getByBreed(breed)
+        },
+        getWithFriends: {
+            type: new GraphQLList(animalType),
+            resolve: (root) => getWithFriends()
         }
     })
 })

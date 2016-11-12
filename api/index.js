@@ -2,24 +2,12 @@ const { graphql } = require(`graphql`)
 const { BasicSchema } = require(`./schema.js`)
 
 const query = `{ 
-    getAllNamed(name: "Ben") {
-        name,
-        species,
-        color,
-        adopt_fee,
-        weight,
-        sex,
-        age,
-        description,
-        date_available,
-        image_url,
-        breed
-    },
-    getByBreed(breed: "Golden Retriever") {
-        name,
-        image_url
+    getWithFriends {
+        name
+        friends {
+            name
+        }
     }
-    
 }`
 
-graphql(BasicSchema, query).then(r => console.log(JSON.stringify(r, null, '\t')))
+graphql(BasicSchema, query).then(r => console.log(JSON.stringify(r, null, '  ')))
