@@ -47,26 +47,26 @@ const getByID = id => data.find(animal => animal.id === id)
 const getAllSpecies = species => data.filter(animal => animal.species === species)
 const getAllNamed = name => data.filter(animal => animal.name === name)
 const getCheaperThan = max_price => data.filter(animal => animal.adopt_fee < max_price)
-const getAllSex = sex => data.filter(animal => animal.sex === sex)
+const getAllOfSex = sex => data.filter(animal => animal.sex === sex)
 const getYoungerThan = age => data.filter(animal => animal.age <= age)
 const getOlderThan = age => data.filter(animal => animal.age >= age)
-const sortByAvailable = () => data.sort((x, y) => x.date_available < y.date_available ? -1 : 1)
+const sortByDateAvailable = () => data.sort((x, y) => x.date_available < y.date_available ? -1 : 1)
 const getWithImage = () => data.filter(animal => animal.image_url)
 const getByBreed = breed => data.filter(animal => animal.breed === breed)
 const getFriends = animal => animal.friends.map(id => getByID(id))
-const getWithFriends = () => data.filter(animal => animal.friends && animal.friends.length) 
+const findPetsWithFriends = () => data.filter(animal => animal.friends && animal.friends.length) 
 
 module.exports = { 
     getByID, 
     getAllSpecies, 
     getAllNamed, 
     getCheaperThan, 
-    getAllSex, 
+    getAllOfSex, 
     getYoungerThan, 
     getOlderThan, 
-    sortByAvailable, 
+    sortByDateAvailable, 
     getWithImage,
     getByBreed,
     getFriends,
-    getWithFriends
+    findPetsWithFriends
 }

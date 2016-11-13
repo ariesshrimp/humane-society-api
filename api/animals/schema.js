@@ -14,14 +14,14 @@ const {
      getAllSpecies, 
      getAllNamed, 
      getCheaperThan, 
-     getAllSex, 
+     getAllOfSex, 
      getYoungerThan, 
      getOlderThan, 
-     sortByAvailable,
+     sortByDateAvailable,
      getWithImage,
      getByBreed,
      getFriends,
-     getWithFriends
+     findPetsWithFriends
 } = require('./data.js')
 
 /** 
@@ -30,33 +30,37 @@ const {
  * type Animal  {
  *  id: String!
  *  name: String
- *  species: String
+ *  species: Enum
  *  color: String
- *  sex: String
+ *  sex: Enum
  *  weight: Float
  *  age: Float
  *  image_url: String
- *  date_available: String
+ *  date_available: Date
  *  description: String
  *  adopt_fee: Float
  *  breed: String
  *  friends: [Animal]
  * }
  * 
- * type User {
- *  id: String!
- *  name: String!
- *  date_joined: String
- *  email: String,
- *  password: String,
- *  favorites: [Animal]
- *  notifications:
- *      frequency: Enum
- *      filters: Enum
+ * type Dog {
+ * 
+ * }
+ * 
+ * type SmallAnimal {
+ * 
+ * }
+ * 
+ * type Cat {
+ * 
+ * }
+ * 
+ * type Horses {
+ * 
  * }
 */
 
-const animalType = new GraphQLObjectType({
+const AnimalType = new GraphQLObjectType({
     name: `Animal`,
     description: `An animal`,
     fields: () => ({
@@ -109,7 +113,7 @@ const animalType = new GraphQLObjectType({
             description: `The arbitrary breed of species.`
         },
         friends: {
-            type: new GraphQLList(animalType),
+            type: new GraphQLList(AnimalType),
             description: `A list of friends the animal has from their previous home, or while living in the shelter.`,
             resolve: animal => getFriends(animal)
         }
@@ -117,11 +121,11 @@ const animalType = new GraphQLObjectType({
 })
 
 
-const queryType = new GraphQLObjectType({
+const QueryType = new GraphQLObjectType({
     name: `Query`,
     fields: () => ({
         getAnimal: {
-            type: animalType,
+            type: AnimalType,
             args: {
                 id: {
                     description: `ID of animal`,
@@ -131,7 +135,7 @@ const queryType = new GraphQLObjectType({
             resolve: (root, { id }) => getByID(id)
         },
         getAllSpecies: {
-            type: new GraphQLList(animalType),
+            type: new GraphQLList(AnimalType),
             args: {
                 species: {
                     description: `Biological species of animal.`,
@@ -141,7 +145,7 @@ const queryType = new GraphQLObjectType({
             resolve: (root, { species }) => getAllSpecies(species)
         },
         getAllNamed: {
-            type: new GraphQLList(animalType),
+            type: new GraphQLList(AnimalType),
             args: {
                 name: {
                     type: GraphQLString,
@@ -151,7 +155,7 @@ const queryType = new GraphQLObjectType({
             resolve: (root, { name }) => getAllNamed(name)
         },
         getCheaperThan: {
-            type: new GraphQLList(animalType),
+            type: new GraphQLList(AnimalType),
             args: {
                 maxPrice: {
                     type: GraphQLFloat,
@@ -160,18 +164,18 @@ const queryType = new GraphQLObjectType({
             },
             resolve: (root, { maxPrice }) => getCheaperThan(maxPrice)
         },
-        getAllSex: {
-            type: new GraphQLList(animalType),
+        getAllOfSex: {
+            type: new GraphQLList(AnimalType),
             args: {
                 sex: {
                     type: GraphQLString,
                     description: `Biological sex of the animal.`
                 }
             },
-            resolve: (root, { sex }) => getAllSex(sex)
+            resolve: (root, { sex }) => getAllOfSex(sex)
         },
         getYoungerThan: {
-            type: new GraphQLList(animalType),
+            type: new GraphQLList(AnimalType),
             args: {
                 maxAge: {
                     type: GraphQLFloat,
@@ -181,7 +185,7 @@ const queryType = new GraphQLObjectType({
             resolve: (root, { maxAge }) => getYoungerThan(maxAge)
         },
         getOlderThan: {
-            type: new GraphQLList(animalType),
+            type: new GraphQLList(AnimalType),
             args: {
                 minAge: {
                     type: GraphQLFloat,
@@ -190,16 +194,16 @@ const queryType = new GraphQLObjectType({
             },
             resolve: (root, { minAge }) => getOlderThan(minAge)
         },
-        sortByAvailable: {
-            type: new GraphQLList(animalType),
-            resolve: (root) => sortByAvailable()
+        sortByDateAvailable: {
+            type: new GraphQLList(AnimalType),
+            resolve: (root) => sortByDateAvailable()
         },
         onlyThoseWithImage: {
-            type: new GraphQLList(animalType),
+            type: new GraphQLList(AnimalType),
             resolve: (root) => getWithImage()
         },
         getByBreed: {
-            type: new GraphQLList(animalType),
+            type: new GraphQLList(AnimalType),
              args: {
                 breed: {
                     type: GraphQLString,
@@ -208,16 +212,16 @@ const queryType = new GraphQLObjectType({
             },
             resolve: (root, { breed }) => getByBreed(breed)
         },
-        getWithFriends: {
-            type: new GraphQLList(animalType),
-            resolve: (root) => getWithFriends()
+        findPetsWithFriends: {
+            type: new GraphQLList(AnimalType),
+            resolve: (root) => findPetsWithFriends()
         }
     })
 })
 
-const BasicSchema = new GraphQLSchema({
-    query: queryType,
+const AnimalSchema = new GraphQLSchema({
+    query: QueryType,
     type: [ GraphQLString ]
 })
 
-module.exports = { BasicSchema }
+module.exports = { AnimalSchema, AnimalType }
