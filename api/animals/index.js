@@ -2,11 +2,11 @@ const { graphql } = require(`graphql`)
 const { AnimalSchema } = require(`./schema.js`)
 
 const query = `{ 
-    findPetsWithFriends {
-        name
-        friends {
-            name
-        }
+    getAllSpecies(species: "RODENT") {
+        name,
+        id,
+        age,
+        image_url
     }
 }`
 
