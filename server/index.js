@@ -2,11 +2,12 @@ import express from 'express'
 import { json } from 'body-parser'
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express'
 import { AnimalSchema } from '../api/animals/schema'
+import { auth } from '../api/database'
 
 const PORT = 4000
-const app = express()
+const server = express()
 
-app.get(`/`, (request, response) => {
+server.get(`/`, (request, response) => {
   response.send(`
   <style>
     center {
@@ -22,14 +23,22 @@ app.get(`/`, (request, response) => {
 `)
 })
 
-app.use(`/graphiql`, json(), graphiqlExpress({
+server.use(`/graphiql`, json(), graphiqlExpress({
   endpointURL: `/graphql` 
 }))
 
-app.use(`/graphql`, json(), graphqlExpress({ 
+server.use(`/graphql`, json(), graphqlExpress({ 
   schema: AnimalSchema 
 }))
 
-app.listen(PORT, () => {
-  console.log(`Visit http://localhost:${ PORT }/graphiql in a browser.`)
-})
+
+auth.signInAnonymously()
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log(`Visit http://localhost:${ PORT }/graphiql in a browser.`)
+    })
+  })
+  .catch(({ message }) => {
+    console.error(message)
+    process.exit()
+  })

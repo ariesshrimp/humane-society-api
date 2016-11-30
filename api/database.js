@@ -1,7 +1,6 @@
-const firebase = require(`firebase`)
-const config = require(`./config.firebase.json`)
+import firebase from 'firebase'
+import config from './config.firebase.json'
 
-const app = firebase.initializeApp(config)
-const database = app.database()
-
-module.exports = { app, database }
+export const app = firebase.initializeApp(config)
+export const database = app.database()
+export const auth = app.auth()
