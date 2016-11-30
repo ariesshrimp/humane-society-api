@@ -1,0 +1,11 @@
+language: node_js
+node_js: node
+  - "7"
+script:
+  - npm test
+cache: yarn
+cache:
+  directories:
+  - $HOME/.yarn-cache
+after_success:
+  bash <(curl -s https://codecov.io/bash)
