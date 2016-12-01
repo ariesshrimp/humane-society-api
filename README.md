@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/joefraley/humane-society-api.svg?branch=master)](https://travis-ci.org/joefraley/humane-society-api) [![codecov](https://codecov.io/gh/joefraley/humane-society-api/branch/master/graph/badge.svg)](https://codecov.io/gh/joefraley/humane-society-api)
+[![Build Status](https://travis-ci.org/joefraley/humane-society-api.svg?branch=master)](https://travis-ci.org/joefraley/humane-society-api) [![codecov](https://codecov.io/gh/joefraley/humane-society-api/branch/master/graph/badge.svg)](https://codecov.io/gh/joefraley/humane-society-api) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+
 
 # Oregon Humane Society API
 A GraphQL API for data about animals sheltered at the Oregon Humane Society.
