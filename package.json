@@ -26,10 +26,15 @@
     "express": "^4.14.0",
     "firebase": "^3.6.1",
     "graphql": "^0.8.0",
-    "graphql-server-express": "^0.4.3"
+    "graphql-server-express": "^0.4.3",
+    "ramda": "^0.22.1"
   },
   "devDependencies": {
     "codecov": "^1.0.1",
+    "eslint": "^3.11.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
     "graphql-tools": "^0.8.3",
     "jest": "^17.0.3",
     "nodemon": "^1.11.0"
