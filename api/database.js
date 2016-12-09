@@ -1,3 +1,4 @@
+'use strict'
 import config from './config.firebase.json'
 import firebase from 'firebase'
 

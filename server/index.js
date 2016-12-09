@@ -1,3 +1,4 @@
+'use strict'
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
 import Schema from '../api/Schema'
 import { auth } from '../api/database'

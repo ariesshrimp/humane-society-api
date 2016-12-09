@@ -1,5 +1,5 @@
+'use strict'
 import { database } from '../database'
-
 const data = database.ref(`/animals`)
 
 export const getByID = id => data.child(`${id}`)

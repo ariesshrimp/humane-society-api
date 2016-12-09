@@ -1,3 +1,4 @@
+'use strict'
 import * as DataBase from './data'
 
 export default {
