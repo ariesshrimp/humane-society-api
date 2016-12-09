@@ -1,5 +1,5 @@
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
-import RootSchema from '../api/RootSchema'
+import Schema from '../api/Schema'
 import { auth } from '../api/database'
 import express from 'express'
 import { json } from 'body-parser'
@@ -29,7 +29,7 @@ server.use(`/graphiql`, json(), graphiqlExpress({
 }))
 
 server.use(`/graphql`, json(), graphqlExpress({
-  schema: RootSchema
+  schema: Schema
 }))
 
 

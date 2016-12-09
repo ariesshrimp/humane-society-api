@@ -4,7 +4,7 @@
   "description": "GraphQL API to consume scraped data from the Oregon Humane Society.",
   "main": "server/index.js",
   "scripts": {
-    "start": "babel-node server",
+    "start": "babel-node server/index.js",
     "dev": "nodemon node_modules/.bin/babel-node server",
     "test": "jest"
   },
@@ -30,6 +30,7 @@
     "ramda": "^0.22.1"
   },
   "devDependencies": {
+    "babel-preset-stage-2": "^6.18.0",
     "codecov": "^1.0.1",
     "eslint": "^3.11.1",
     "eslint-config-standard": "^6.2.1",
