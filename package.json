@@ -20,8 +20,6 @@
   "author": "Joseph Fraley",
   "license": "MIT",
   "dependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-es2015": "^6.18.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "firebase": "^3.6.1",
@@ -30,13 +28,15 @@
     "ramda": "^0.22.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
     "babel-preset-stage-2": "^6.18.0",
     "codecov": "^1.0.1",
     "eslint": "^3.11.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
-    "graphql-tools": "^0.8.3",
+    "flow": "^0.2.3",
     "jest": "^17.0.3",
     "nodemon": "^1.11.0"
   },
