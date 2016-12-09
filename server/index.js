@@ -33,7 +33,6 @@ server.use(`/graphql`, json(), graphqlExpress({
   schema: Schema
 }))
 
-
 auth.signInAnonymously()
   .then(() => server.listen(PORT, () => console.log(`Visit ${URL} in a browser.`)))
   .catch(({ message }) => {
