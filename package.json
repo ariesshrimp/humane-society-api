@@ -7,7 +7,7 @@
     "dev": "nodemon node_modules/.bin/babel-node server",
     "lint": "eslint . --ignore-path ./.eslintignore",
     "start": "babel-node server/index.js",
-    "test": "jest --forceExit"
+    "test": "jest --forceExit && npm run lint --fix"
   },
   "keywords": [
     "graphql",

@@ -33,7 +33,6 @@ server.use(`/graphql`, json(), graphqlExpress({
   schema: Schema
 }))
 
-
 server.listen(PORT, () => {
   Database.auth()
   console.log(`Visit ${URL} in a browser.`)
