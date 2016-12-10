@@ -38,3 +38,5 @@ server.listen(PORT, () => {
   Database.auth()
   console.log(`Visit ${URL} in a browser.`)
 })
+
+export default server
