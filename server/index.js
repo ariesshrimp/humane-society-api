@@ -1,7 +1,7 @@
 'use strict'
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
+import Database from '../api/database'
 import Schema from '../api/Schema'
-import { auth } from '../api/database'
 import express from 'express'
 import { json } from 'body-parser'
 
@@ -33,9 +33,8 @@ server.use(`/graphql`, json(), graphqlExpress({
   schema: Schema
 }))
 
-auth.signInAnonymously()
-  .then(() => server.listen(PORT, () => console.log(`Visit ${URL} in a browser.`)))
-  .catch(({ message }) => {
-    console.error(message)
-    process.exit()
-  })
+
+server.listen(PORT, () => {
+  Database.auth()
+  console.log(`Visit ${URL} in a browser.`)
+})

@@ -1,6 +1,8 @@
 'use strict'
 import R from 'ramda'
-import { database } from '../database'
+import Remote from '../database'
+
+const database = Remote.database()
 const data = database.ref(`/animals`)
 
 const unpack = R.compose(
@@ -10,7 +12,7 @@ const unpack = R.compose(
 
 export const getByID = id => data.child(`${id}`)
   .once(`value`)
-  .then(unpack)
+  .then(snapshot => snapshot.val())
 
 export const getAllSpecies = species => data.orderByChild(`species`)
   .equalTo(species)
@@ -45,14 +47,6 @@ export const getOlderThan = age => data.orderByChild(`age`)
 export const sortByDateAvailable = () => data.orderByChild(`date_available`)
   .once(`value`)
   .then(unpack)
-
-export const getWithImage = () => data.orderByChild(`image_url`)
-  .once(`value`)
-  .then(snapshot => snapshot.val())
-  .then(R.compose(
-    R.filter(animal => animal.image_url),
-    R.values
-  ))
 
 export const getByBreed = breed => data.orderByChild(`breed`)
   .equalTo(breed)

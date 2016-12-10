@@ -1,7 +1,9 @@
 'use strict'
-import config from './config.firebase.json'
-import firebase from 'firebase'
+import firebase from 'firebase-admin'
+import { resolve } from 'path'
 
-export const app = firebase.initializeApp(config)
-export const database = app.database()
-export const auth = app.auth()
+const CONFIG = resolve(__dirname, `config.firebase.json`)
+export default firebase.initializeApp({
+  credential: firebase.credential.cert(CONFIG),
+  databaseURL: `https://humane-society-scrape.firebaseio.com`
+})
