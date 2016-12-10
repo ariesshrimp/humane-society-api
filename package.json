@@ -5,7 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "dev": "nodemon node_modules/.bin/babel-node server",
-    "lint": "eslint . --ignore-path ./.eslintignore",    
+    "lint": "eslint . --ignore-path ./.eslintignore",
     "start": "babel-node server/index.js",
     "test": "jest"
   },
@@ -37,7 +37,6 @@
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
-    "flow": "^0.2.3",
     "jest": "^17.0.3",
     "nodemon": "^1.11.0"
   },
