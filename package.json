@@ -7,7 +7,7 @@
     "dev": "nodemon node_modules/.bin/babel-node server",
     "lint": "eslint . --ignore-path ./.eslintignore",
     "start": "babel-node server/index.js",
-    "test": "jest --forceExit && npm run lint --fix"
+    "test": "jest && npm run lint --fix"
   },
   "keywords": [
     "graphql",
@@ -43,8 +43,6 @@
   },
   "jest": {
     "testRegex": "__tests__",
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
     "moduleNameMapper": {
       "moduleFileExtensions": [
         "js"
