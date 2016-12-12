@@ -22,7 +22,6 @@ describe(`Animal Schema Tests`, () => {
           }
         }
       `
-
       const result = await graphql(Schema, query)
       expect(result).toBeTruthy()
     })
