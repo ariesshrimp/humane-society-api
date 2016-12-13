@@ -49,7 +49,7 @@ export default {
         type: new GraphQLNonNull(GraphQLString)
       }
     },
-    resolve: Resolvers.getByID,
+    resolve: Resolvers.getAnimal,
     type: Animal
   },
 

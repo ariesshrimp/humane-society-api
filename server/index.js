@@ -30,6 +30,7 @@ server.use(`/graphiql`, json(), graphiqlExpress({
 }))
 
 server.use(`/graphql`, json(), graphqlExpress({
+  formatError: console.error,
   schema: Schema
 }))
 

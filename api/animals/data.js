@@ -1,16 +1,15 @@
 'use strict'
 import R from 'ramda'
-import Remote from '../database'
+import app from '../database'
 
-const database = Remote.database()
-const data = database.ref(`/animals`)
+const data = app.database().ref(`/animals`)
 
 const unpack = R.compose(
   R.values,
   snapshot => snapshot.val()
 )
 
-export const getByID = id => data.child(`${id}`)
+export const getByID = id => app.database().ref(`/animals/${id}`)
   .once(`value`)
   .then(snapshot => snapshot.val())
 

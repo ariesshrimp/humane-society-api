@@ -7,7 +7,7 @@
     "dev": "nodemon node_modules/.bin/babel-node server",
     "lint": "eslint . --ignore-path ./.eslintignore",
     "start": "babel-node server/index.js",
-    "test": "jest && npm run lint --fix"
+    "test": "npm run lint --fix && jest"
   },
   "keywords": [
     "graphql",
@@ -30,6 +30,8 @@
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
+    "babel-jest": "^17.0.2",
+    "babel-polyfill": "^6.20.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-stage-2": "^6.18.0",
     "babel-preset-stage-3": "^6.17.0",
@@ -43,6 +45,8 @@
   },
   "jest": {
     "testRegex": "__tests__",
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
     "moduleNameMapper": {
       "moduleFileExtensions": [
         "js"

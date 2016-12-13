@@ -3,9 +3,8 @@ import firebase from 'firebase-admin'
 import { resolve } from 'path'
 
 const CONFIG = resolve(__dirname, `config.firebase.json`)
-const Remote = firebase.initializeApp({
+
+export default firebase.initializeApp({
   credential: firebase.credential.cert(CONFIG),
   databaseURL: `https://humane-society-scrape.firebaseio.com`
 })
-
-export default Remote

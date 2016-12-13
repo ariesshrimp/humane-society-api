@@ -1,32 +1,29 @@
 'use strict'
-import Schema from '../Schema'
-import Remote from '../database'
+import app from '../database'
 import { graphql } from 'graphql'
+import Schema from '../Schema'
+import * as Data from '../animals/data'
 
-describe(`Animal Schema Tests`, () => {
-  beforeAll(async () => {
-    await Remote.auth()
-    console.log('before')
-  })
-
-  describe(`Basic Queries`, () => {
-    it('Correctly finds a rat named Basil', async () => {
-      console.log('spec')
-      const query = `
-        query {
-          getAllNamed(name: "Basil") {
-            name
-          }
+describe(`Queries`, () => {
+  it(`Correctly finds rat named Basil`, async () => {
+    const query = `
+      query {
+        getAnimal(id: "196415") {
+          id
+          species
+          breed
+          name
         }
-      `
-      const result = await graphql(Schema, query)
-      console.log(result.data)
-      expect(result).toBeTruthy()
-    })
+      }
+    `
+    const { data: { getAnimal }} = await graphql(Schema, query)
+    expect(getAnimal).toBeTruthy()
   })
 
-  afterAll(async () => {
-    await Remote.delete()
-    console.log('after')    
+  afterAll(() => {
+    return app.delete()
+    .then(() => console.log(`App destroyed...`))
+    .catch(console.error)   
   })
 })
+
