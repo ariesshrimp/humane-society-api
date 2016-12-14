@@ -1,23 +1,17 @@
 'use strict'
 import app from '../database'
 import { graphql } from 'graphql'
-import Schema from '../Schema'
-import * as Data from '../animals/data'
+import * as UserData from '../users/data'
+import Resolvers from '../users/resolvers'
+import * as AnimalData from '../animals/data'
+import R from 'ramda'
 
 describe(`Queries`, () => {
-  it(`Correctly finds rat named Basil`, async () => {
-    const query = `
-      query {
-        getAnimal(id: "196415") {
-          id
-          species
-          breed
-          name
-        }
-      }
-    `
-    const { data: { getAnimal }} = await graphql(Schema, query)
-    expect(getAnimal).toBeTruthy()
+  it(`Correctly finds users by ID`, async () => {
+    const user = await Resolvers.getUser(1)
+    // const faves = await Promise.all(R.map(AnimalData.getByID, user.favorites))
+    // console.log(faves)
+    expect(user.name).toEqual(`Joe`)
   })
 
   afterAll(() => {

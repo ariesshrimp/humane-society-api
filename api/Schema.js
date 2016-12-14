@@ -3,11 +3,13 @@ import {
   GraphQLObjectType,
   GraphQLSchema
 } from 'graphql'
-import queries from './animals/queries'
+// import AnimalQueries from './animals/queries'
+// import R from 'ramda'
+import UserQueries from './users/queries'
 
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
-    fields: queries,
+    fields: UserQueries,
     name: 'Query'
   })
 })

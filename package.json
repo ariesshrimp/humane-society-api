@@ -5,9 +5,9 @@
   "main": "server/index.js",
   "scripts": {
     "dev": "nodemon node_modules/.bin/babel-node server",
-    "lint": "eslint . --ignore-path ./.eslintignore",
+    "lint": "eslint . --fix --ignore-path ./.eslintignore",
     "start": "babel-node server/index.js",
-    "test": "npm run lint --fix && jest"
+    "test": "npm run lint && jest"
   },
   "keywords": [
     "graphql",
