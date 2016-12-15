@@ -13,7 +13,7 @@ export default {
         type: GraphQLString
       }
     },
-    resolve: (root, { id }) => Resolvers.getUser(id),
+    resolve: Resolvers.getUser,
     type: User
   }
 }

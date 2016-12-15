@@ -5,8 +5,8 @@ import {
   GraphQLString
 } from 'graphql'
 import Animal from '../animals/type'
-import { getByID } from '../animals/data'
 import R from 'ramda'
+import { getByID } from '../animals/data'
 
 export default new GraphQLObjectType({
   description: `A user`,

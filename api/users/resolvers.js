@@ -2,5 +2,5 @@
 import * as Database from './data'
 
 export default {
-  getUser: Database.getByID
+  getUser: (root, { id }) => Database.getByID(id)
 }
