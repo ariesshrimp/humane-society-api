@@ -7,7 +7,7 @@
     "dev": "nodemon node_modules/.bin/babel-node server",
     "lint": "eslint . --fix --ignore-path ./.eslintignore",
     "start": "babel-node server/index.js",
-    "test": "npm run lint && jest"
+    "test": "npm run lint && ./node_modules/.bin/mocha api/**/__tests__/**/*.test.js --compilers js:babel-register --require babel-polyfill"
   },
   "keywords": [
     "graphql",
@@ -30,30 +30,17 @@
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
-    "babel-jest": "^17.0.2",
     "babel-polyfill": "^6.20.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-stage-2": "^6.18.0",
     "babel-preset-stage-3": "^6.17.0",
-    "codecov": "^1.0.1",
+    "babel-runtime": "^6.20.0",
+    "chai": "^3.5.0",
     "eslint": "^3.11.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
-    "jest": "^17.0.3",
+    "mocha": "^3.2.0",
     "nodemon": "^1.11.0"
-  },
-  "jest": {
-    "testRegex": "__tests__",
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true,
-    "moduleNameMapper": {
-      "moduleFileExtensions": [
-        "js"
-      ],
-      "moduleDirectories": [
-        "node_modules"
-      ]
-    }
   }
 }
