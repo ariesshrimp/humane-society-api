@@ -2,17 +2,18 @@
 import app from '../database'
 import R from 'ramda'
 import Resolvers from '../users/resolvers'
+import Schema from '../Schema'
 import { expect } from 'chai'
 import { graphql } from 'graphql'
 import { animal, user } from './testObjects.js'
 import * as Animals from '../animals/data'
 import * as Database from '../users/data'
 
-describe(`User data operations`, () => {
+describe(`Users`, () => {
   const testAnimal = app.database().ref(`/animals/TEST_ANIMAL`)
   const testUser = app.database().ref(`/users/TEST_USER`)
 
-  describe(`Write operations`, () => {
+  describe(`Queries`, () => {
     // /*
     // Set up some test entitites in the prod databse    
     beforeEach(async function() {
@@ -22,17 +23,29 @@ describe(`User data operations`, () => {
     })
     // */
 
-    it(`Correctly marks an animal as favorited by a user`, async () => {
-      await Database.addFavorite(`TEST_USER`)(`TEST_ANIMAL`)
-      const actual = await Animals.getByID(`TEST_ANIMAL`)
-      const followers = R.keys(R.prop(`followers`)(actual))
-      expect(followers).to.contain(`TEST_USER`)
-    })
+    it(`Gets a user and it's favorite animals`, async () => {
+      const query = `
+        query {
+          getUser(id: "TEST_USER") {
+            id
+            name
+            favorites {
+              id
+              name
+              followers {
+                id
+                name
+              }
+            }
+          }
+        }
+      `
 
-    it(`Removes a user from the databse, along with all its references`, async () => {
-      await Database.removeUser(`TEST_USER`)
-      const actual = await Database.getByID(`TEST_USER`)
-      expect(actual).to.be.null
+      const { data } = await graphql(Schema, query)
+      const expected = {
+
+      }
+      expect(data).to.deep.equal(expected)
     })
   })
 

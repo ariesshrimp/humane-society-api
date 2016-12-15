@@ -10,7 +10,7 @@ import UserQueries from './users/queries'
 
 export default new GraphQLSchema({
   mutation: new GraphQLObjectType({
-    fields: R.merge(UserMutations),
+    fields: R.merge({}, UserMutations),
     name: 'Mutation'
   }),
   query: new GraphQLObjectType({

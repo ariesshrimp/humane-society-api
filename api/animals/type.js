@@ -5,6 +5,9 @@ import {
   GraphQLObjectType,
   GraphQLString
 } from 'graphql'
+import R from 'ramda'
+import User from '../users/type'
+import { getByID } from '../users/data'
 
 export default new GraphQLObjectType({
   description: `An animal`,
@@ -32,6 +35,14 @@ export default new GraphQLObjectType({
     description: {
       description: `A short paragraph or two from the humane society about this animal's personality.`,
       type: GraphQLString
+    },
+    followers: {
+      description: `A list of users that have marked this animal as a favorite`,
+      resolve: animal => Promise.all(
+        R.map(getByID,
+        R.keys(
+          R.prop(`followers`)(animal)))),
+      type: new GraphQLList(User)
     },
     id: {
       description: `A unique identifier for this animal in the humane society database.`,

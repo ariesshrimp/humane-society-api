@@ -13,7 +13,10 @@ export default new GraphQLObjectType({
   fields: () => ({
     favorites: {
       description: `Favorite animals`,
-      resolve: user => Promise.all(R.map(getByID, user.favorites)),
+      resolve: user => Promise.all(
+        R.map(getByID,
+        R.keys(
+          R.prop(`favorites`)(user)))),
       type: new GraphQLList(Animal)
     },
     id: {

@@ -5,11 +5,11 @@ import { expect } from 'chai'
 import { animal } from './testObjects.js'
 import * as Database from '../animals/data'
 
-describe(`Animal operations`, () => {
+describe(`Animal data operations`, () => {
   const testAnimal = app.database().ref(`/animals/TEST_ANIMAL`)
   const testUser = app.database().ref(`/users/TEST_USER`)
 
-  describe(`Mutations`, () => {
+  describe(`Write operations`, () => {
     // /*
     // Set up some test entitites in the prod databse    
     beforeEach(async function() {
