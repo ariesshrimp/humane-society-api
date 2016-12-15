@@ -1,6 +1,7 @@
 'use strict'
 import R from 'ramda'
 import app from '../database'
+import { removeFavorite } from '../users/data'
 
 const data = app.database().ref(`/animals`)
 
@@ -56,9 +57,39 @@ export const getByBreed = breed => data.orderByChild(`breed`)
 
 // Mutative Operations
 // -------------------
-export const markAsFavorited = (id, user) => app.database().ref(`/animals/${id}`)
-    .transaction(current => {
-      console.log(current, id, user)
-      if (false /* curren === null */) return // animal does not exist, abort transaction
-      else return R.set(R.lensProp(user), true, current.followers) // set given user to be a follower
-    })
+export const markAsFavorite = id => user => app.database().ref(`/animals/${id}`)
+  .once(`value`)
+  .then(snapshot => {
+    if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
+      return app.database()
+        .ref(`/animals/${id}/followers`)
+        .set({ [ user ]: true }) // mark this user as a follower
+    }
+  })
+
+export const unmarkAsFavorite = id => user => app.database().ref(`/animals/${id}`)
+  .once(`value`)
+  .then(snapshot => {
+    if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
+      return app.database()
+        .ref(`/animals/${id}/followers/${user}`)
+        .remove()
+    }
+  })
+
+/**
+ * @description -
+ *  remove an animal from the database, but first clean up all its other references
+ * @param {string} animalId - uuid of animal
+ * @return {promise} - promise to remove an animal from the database
+ */
+export const removeAnimal = async (animalId) => {
+  const animal = await getByID(animalId)
+  const followers = R.keys(R.prop(`followers`)(animal))
+
+  // First remove this animal from any favorites lists it's on
+  await R.map(userId => removeFavorite(userId)(animalId), followers)
+
+  // Then destroy the animal
+  return app.database().ref(`animals/${animalId}`).remove()
+}
