@@ -9,6 +9,8 @@ const unpack = R.compose(
   snapshot => snapshot.val()
 )
 
+// Read-only Operations
+// --------------------
 export const getByID = id => app.database().ref(`/animals/${id}`)
   .once(`value`)
   .then(snapshot => snapshot.val())
@@ -51,3 +53,12 @@ export const getByBreed = breed => data.orderByChild(`breed`)
   .equalTo(breed)
   .once(`value`)
   .then(unpack)
+
+// Mutative Operations
+// -------------------
+export const markAsFavorited = (id, user) => app.database().ref(`/animals/${id}`)
+    .transaction(current => {
+      console.log(current, id, user)
+      if (false /* curren === null */) return // animal does not exist, abort transaction
+      else return R.set(R.lensProp(user), true, current.followers) // set given user to be a follower
+    })
