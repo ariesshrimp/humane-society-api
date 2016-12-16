@@ -26,32 +26,35 @@ describe(`User data operations`, () => {
   const userRef = app.database().ref(`/users/${TEST_ID}`)
 
   describe(`Write operations`, () => {
-    // /*
     // Set up some test entitites in the prod databse    
-    beforeEach(async function() {
+    beforeEach(function() {
       this.timeout(5000)
-      await animalRef.set(testAnimal)
-      return await userRef.set(testUser)
+      return Promise.all([
+        animalRef.set(testAnimal),
+        userRef.set(testUser)
+      ])
     })
-    // */
 
     it(`Correctly marks an animal as favorited by a user`, async () => {
       await Database.addFavorite(testUser.id)(testAnimal.id)
       const actual = await Animals.getByID(testAnimal.id)
       const followers = R.keys(R.prop(`followers`)(actual))
-      return await expect(followers).to.contain(testUser.id)
+      expect(followers).to.contain(testUser.id)
     })
 
     it(`Removes a user from the databse, along with all its references`, async () => {
       await Database.removeUser(testUser.id)
       const actual = await Database.getByID(testUser.id)
-      return await expect(actual).to.be.null
+      expect(actual).to.be.null // The user's gone from the DB
+
+      const { followers } = await animalRef.once(`value`).then(snapshot => snapshot.val())
+      expect(followers).to.be.undefined // Their reference is removed from all users who faved it
     })
   })
 
   // Clean-up those test entities we started with
-  after(async () => {
-    await animalRef.remove()
-    return await userRef.remove()
-  })
+  after(() => Promise.all([
+    animalRef.remove(),
+    userRef.remove()
+  ]))
 })

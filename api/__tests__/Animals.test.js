@@ -23,24 +23,29 @@ describe(`Animal data operations`, () => {
   const userRef = app.database().ref(`/users/${TEST_ID}`)
 
   describe(`Write operations`, () => {
-    // /*
-    // Set up some test entitites in the prod databse    
-    beforeEach(async function() {
+    // Set up some test entitites in the prod databse
+    beforeEach(function() {
       this.timeout(5000)
-      return await animalRef.set(testAnimal)
+      return Promise.all([
+        animalRef.set(testAnimal),
+        userRef.set(testUser)
+      ])
     })
-    // */
 
     it(`Removes an animal from the databse, along with all its references`, async () => {
       await Database.removeAnimal(testAnimal.id)
       const actual = await Database.getByID(testAnimal.id)
-      return await expect(actual).to.be.null
+      expect(actual).to.be.null // The animal's gone from the DB
+
+      const { favorites } = await userRef.once(`value`).then(snapshot => snapshot.val())
+      expect(favorites).to.be.undefined // Their reference is removed from all users who faved it
     })
   })
 
   // Clean-up those test entities we started with
-  after(async () => {
-    return await animalRef.remove()
-  })
+  after(() => Promise.all([
+    animalRef.remove(),
+    userRef.remove()
+  ]))
 })
 

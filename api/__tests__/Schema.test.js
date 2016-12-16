@@ -28,13 +28,15 @@ describe(`Users`, () => {
   
   describe(`Queries`, () => {
     // Set up some test entitites in the prod databse    
-    before(async function() {
-      this.timeout(1000)
-      await animalRef.set(testAnimal)
-      await userRef.set(testUser)
+    beforeEach(function() {
+      this.timeout(5000)
+      return Promise.all([
+        animalRef.set(testAnimal),
+        userRef.set(testUser)
+      ])
     })
 
-    it(`Gets a user and it's favorite animals`, async () => {
+    it(`Gets a user and its favorite animals`, async () => {
       const query = `
         query {
           getUser(id: "${testUser.id}") {
@@ -69,8 +71,8 @@ describe(`Users`, () => {
   })
 
   // Clean-up those test entities we started with
-  after(async () => {
-    await animalRef.remove()
-    await userRef.remove()
-  })
+  after(() => Promise.all([
+    animalRef.remove(),
+    userRef.remove()
+  ]))
 })
