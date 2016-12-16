@@ -3,35 +3,46 @@ import app from '../database'
 import R from 'ramda'
 import Resolvers from '../users/resolvers'
 import Schema from '../Schema'
+import uuid from 'node-uuid'
 import { expect } from 'chai'
 import { graphql } from 'graphql'
-import { animal, user } from './testObjects.js'
 import * as Animals from '../animals/data'
 import * as Database from '../users/data'
+import * as TestObjects from './testObjects.js'
 
 describe(`Users`, () => {
-  const testAnimal = app.database().ref(`/animals/TEST_ANIMAL`)
-  const testUser = app.database().ref(`/users/TEST_USER`)
+  // XXX:jmf generate special-namespaced-for-sure-unique test subjects since we hit prod db.
+  const TEST_ID = `TEST_${uuid.v4()}`
 
+  let testAnimal = R.merge(TestObjects.animal, {
+    followers: {[TEST_ID]: true },
+    id: TEST_ID
+  })
+
+  let testUser = R.merge(TestObjects.user, {
+    favorites: {[TEST_ID]: true },
+    id: TEST_ID
+  })
+  const animalRef = app.database().ref(`/animals/${TEST_ID}`)
+  const userRef = app.database().ref(`/users/${TEST_ID}`)
+  
   describe(`Queries`, () => {
-    // /*
     // Set up some test entitites in the prod databse    
-    beforeEach(async function() {
-      this.timeout(5000)
-      await testAnimal.set(animal)
-      await testUser.set(user)
+    before(async function() {
+      this.timeout(1000)
+      await animalRef.set(testAnimal)
+      await userRef.set(testUser)
     })
-    // */
 
     it(`Gets a user and it's favorite animals`, async () => {
       const query = `
         query {
-          getUser(id: "TEST_USER") {
+          getUser(id: "${testUser.id}") {
             id
             name
             favorites {
-              id
               name
+              id
               followers {
                 id
                 name
@@ -40,18 +51,26 @@ describe(`Users`, () => {
           }
         }
       `
-
-      const { data } = await graphql(Schema, query)
+      const { data: { getUser: actual }} = await graphql(Schema, query)
       const expected = {
-
+        id: testUser.id,
+        name: testUser.name,
+        favorites: [{     // <- Test Guy's list of favorite animals includes Test Animal
+          id: testAnimal.id,
+          name: testAnimal.name,
+          followers: [{   // <- Test Animal's list of followers includes Test Guy
+              id: testUser.id,
+              name: testUser.name
+          }]
+        }]
       }
-      expect(data).to.deep.equal(expected)
+      await expect(actual).to.deep.equal(expected)
     })
   })
 
   // Clean-up those test entities we started with
   after(async () => {
-    await testAnimal.remove()
-    await testUser.remove()
+    await animalRef.remove()
+    await userRef.remove()
   })
 })
