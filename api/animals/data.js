@@ -62,8 +62,8 @@ export const markAsFavorite = id => user => app.database().ref(`/animals/${id}`)
   .then(snapshot => {
     if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
       return app.database()
-        .ref(`/animals/${id}/followers`)
-        .set({ [ user ]: true }) // mark this user as a follower
+        .ref(`/animals/${id}/followers/${user}`)
+        .set(true) // mark this user as a follower
     }
   })
 

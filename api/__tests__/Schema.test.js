@@ -41,8 +41,8 @@ describe(`Users`, () => {
             id
             name
             favorites {
-              name
               id
+              name
               followers {
                 id
                 name

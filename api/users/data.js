@@ -30,18 +30,18 @@ export const getByID = id => app.database().ref(`/users/${id}`)
  * @param {string} animal - uuid of animal
  * @return A promise of both concurrent changes
  */
-export const addFavorite = userId => animal => Promise.all([
+export const addFavorite = userId => animalId => Promise.all([
   app.database().ref(`/users/${userId}`)
     .once(`value`)
     .then(snapshot => {
       if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
         return app.database()
-          .ref(`/users/${userId}/favorites`)
-          .set({ [ animal ]: true }) // mark this user as a follower
+          .ref(`/users/${userId}/favorites/${animalId}`)
+          .set(true) // mark this user as a follower
       }
     }),
-  markAsFavorite(animal)(userId)
-])
+  markAsFavorite(animalId)(userId)
+]).then(() => getByID(userId)) // return the updated user
 
 /**
  * @description -
@@ -61,7 +61,7 @@ export const removeFavorite = userId => animalId => Promise.all([
       }
     }),
   unmarkAsFavorite(animalId)(userId)
-])
+]).then(() => getByID(userId)) // return the updated user
 
 export const removeUser = async (userId) => {
   const user = await getByID(userId)
@@ -71,5 +71,7 @@ export const removeUser = async (userId) => {
   await R.map(animalId => unmarkAsFavorite(animalId)(userId), favorites)
 
   // Then destroy the user
-  return app.database().ref(`users/${userId}`).remove()
+  await app.database().ref(`users/${userId}`).remove()
+
+  return null
 }

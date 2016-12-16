@@ -2,6 +2,7 @@
 import * as Database from './data'
 
 export default {
-  addFavorite: (root, { id, animal }) => Database.addFavorite(id, animal),
-  getUser: (root, { id }) => Database.getByID(id)
+  addFavorite: (root, { userId, animalId }) => Database.addFavorite(userId)(animalId),
+  getUser: (root, { id }) => Database.getByID(id),
+  removeFavorite: (root, { userId, animalId }) => Database.removeFavorite(userId)(animalId)
 }
