@@ -2,6 +2,7 @@
 import { markAsFavorite, unmarkAsFavorite } from '../animals/data'
 import R from 'ramda'
 import app from '../database'
+import isEmail from 'validator/lib/isEmail'
 
 // Read-only Operations
 // --------------------
@@ -67,11 +68,40 @@ export const removeUser = async (userId) => {
   const user = await getByID(userId)
   const favorites = R.keys(R.prop(`favorites`)(user))
 
-  // First remove this animal from any favorites lists it's on
+  // First find all their favorite animals and remove them from those followers lists
   await R.map(animalId => unmarkAsFavorite(animalId)(userId), favorites)
 
   // Then destroy the user
   await app.database().ref(`users/${userId}`).remove()
+  await app.auth().deleteUser(userId)
 
-  return null
+  // return the deleted user
+  return user
+}
+
+// Regex for 8-100 characters containing a digit, a lowercase, an uppercase, and a non-word character
+const validPassword = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,100}/g
+
+export const createUser = async ({ email, emailVerified = false, password, displayName, disabled = false }) => {
+  if (!isEmail(email)) throw Error(`${email} is not a valid email`)
+  else if (!validPassword.test(password)) throw Error(`Password should contain number, lowercase, uppercase, and a non-word character. Greater than 8 characters long.`)
+
+  // Will throw if email already in use
+  const newUser = await app.auth().createUser({
+    disabled,
+    displayName,
+    email,
+    emailVerified,
+    password
+  })
+
+  // Copy the user to the /user container to track favorites, settings, etc
+  const userRef = await app.database().ref(`users/${newUser.uid}`)
+  userRef.set({
+    id: newUser.uid,
+    name: displayName
+  })
+
+  // Return the new user
+  return getByID(newUser.uid)
 }

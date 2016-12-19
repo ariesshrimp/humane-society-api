@@ -46,10 +46,6 @@ export const getOlderThan = age => data.orderByChild(`age`)
   .once(`value`)
   .then(unpack)
 
-export const sortByDateAvailable = () => data.orderByChild(`date_available`)
-  .once(`value`)
-  .then(unpack)
-
 export const getByBreed = breed => data.orderByChild(`breed`)
   .equalTo(breed)
   .once(`value`)

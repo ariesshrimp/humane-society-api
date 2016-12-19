@@ -20,6 +20,24 @@ export default {
     resolve: Resolvers.addFavorite,
     type: User
   },
+  createUser: {
+    args: {
+      email: {
+        description: `Valid email address for new user`,
+        type: GraphQLString
+      },
+      name: {
+        description: `New user's display name`,
+        type: GraphQLString
+      },
+      password: {
+        description: `New user's account password`,
+        type: GraphQLString
+      }
+    },
+    resolve: Resolvers.createUser,
+    type: User
+  },
   removeFavorite: {
     args: {
       animalId: {
@@ -32,6 +50,16 @@ export default {
       }
     },
     resolve: Resolvers.removeFavorite,
+    type: User
+  },
+  removeUser: {
+    args: {
+      userId: {
+        description: `Unique ID of the target user.`,
+        type: GraphQLString
+      }
+    },
+    resolve: Resolvers.removeUser,
     type: User
   }
 }
