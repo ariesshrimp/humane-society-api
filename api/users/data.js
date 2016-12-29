@@ -16,7 +16,7 @@ import isEmail from 'validator/lib/isEmail'
  *  const user = async getByID(1)
  *  { name: Joe, id: 1, favorites: [] }
  */
-export const getByID = id => app.database().ref(`/users/${id}`)
+export const getByID = id => app().database().ref(`/users/${id}`)
   .once(`value`)
   .then(snapshot => snapshot.val())
 
@@ -32,11 +32,11 @@ export const getByID = id => app.database().ref(`/users/${id}`)
  * @return A promise of both concurrent changes
  */
 export const addFavorite = userId => animalId => Promise.all([
-  app.database().ref(`/users/${userId}`)
+  app().database().ref(`/users/${userId}`)
     .once(`value`)
     .then(snapshot => {
       if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
-        return app.database()
+        return app().database()
           .ref(`/users/${userId}/favorites/${animalId}`)
           .set(true) // mark this user as a follower
       }
@@ -52,11 +52,11 @@ export const addFavorite = userId => animalId => Promise.all([
  * @return A promise of both concurrent changes
  */
 export const removeFavorite = userId => animalId => Promise.all([
-  app.database().ref(`/users/${userId}`)
+  app().database().ref(`/users/${userId}`)
     .once(`value`)
     .then(snapshot => {
       if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
-        return app.database()
+        return app().database()
           .ref(`/users/${userId}/favorites/${animalId}`)
           .remove()
       }
@@ -72,8 +72,8 @@ export const removeUser = async (userId) => {
   await R.map(animalId => unmarkAsFavorite(animalId)(userId), favorites)
 
   // Then destroy the user
-  await app.database().ref(`users/${userId}`).remove()
-  await app.auth().deleteUser(userId)
+  await app().database().ref(`users/${userId}`).remove()
+  await app().auth().deleteUser(userId)
 
   // return the deleted user
   return user
@@ -87,7 +87,7 @@ export const createUser = async ({ email, emailVerified = false, password, displ
   else if (!validPassword.test(password)) throw Error(`Password should contain number, lowercase, uppercase, and a non-word character. Greater than 8 characters long.`)
 
   // Will throw if email already in use
-  const newUser = await app.auth().createUser({
+  const newUser = await app().auth().createUser({
     disabled,
     displayName,
     email,
@@ -96,7 +96,7 @@ export const createUser = async ({ email, emailVerified = false, password, displ
   })
 
   // Copy the user to the /user container to track favorites, settings, etc
-  const userRef = await app.database().ref(`users/${newUser.uid}`)
+  const userRef = await app().database().ref(`users/${newUser.uid}`)
   userRef.set({
     id: newUser.uid,
     name: displayName

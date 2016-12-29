@@ -3,7 +3,7 @@ import R from 'ramda'
 import app from '../database'
 import { removeFavorite } from '../users/data'
 
-const data = app.database().ref(`/animals`)
+const data = app().database().ref(`/animals`)
 
 const unpack = R.compose(
   R.values,
@@ -12,7 +12,7 @@ const unpack = R.compose(
 
 // Read-only Operations
 // --------------------
-export const getByID = id => app.database().ref(`/animals/${id}`)
+export const getByID = id => app().database().ref(`/animals/${id}`)
   .once(`value`)
   .then(snapshot => snapshot.val())
 
@@ -53,21 +53,21 @@ export const getByBreed = breed => data.orderByChild(`breed`)
 
 // Mutative Operations
 // -------------------
-export const markAsFavorite = id => user => app.database().ref(`/animals/${id}`)
+export const markAsFavorite = id => user => app().database().ref(`/animals/${id}`)
   .once(`value`)
   .then(snapshot => {
     if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
-      return app.database()
+      return app().database()
         .ref(`/animals/${id}/followers/${user}`)
         .set(true) // mark this user as a follower
     }
   })
 
-export const unmarkAsFavorite = id => user => app.database().ref(`/animals/${id}`)
+export const unmarkAsFavorite = id => user => app().database().ref(`/animals/${id}`)
   .once(`value`)
   .then(snapshot => {
     if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
-      return app.database()
+      return app().database()
         .ref(`/animals/${id}/followers/${user}`)
         .remove()
     }
@@ -87,5 +87,5 @@ export const removeAnimal = async (animalId) => {
   await R.map(userId => removeFavorite(userId)(animalId), followers)
 
   // Then destroy the animal
-  return app.database().ref(`animals/${animalId}`).remove()
+  return app().database().ref(`animals/${animalId}`).remove()
 }

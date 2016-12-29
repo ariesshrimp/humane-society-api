@@ -1,6 +1,5 @@
 'use strict'
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
-// import Database from '../api/database'
 import Schema from '../api/Schema'
 import express from 'express'
 import { json } from 'body-parser'
