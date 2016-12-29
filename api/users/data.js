@@ -2,7 +2,7 @@
 import { markAsFavorite, unmarkAsFavorite } from '../animals/data'
 import R from 'ramda'
 import app from '../database'
-import isEmail from 'validator/lib/isEmail'
+// import isEmail from 'validator/lib/isEmail'
 
 // Read-only Operations
 // --------------------
@@ -80,11 +80,11 @@ export const removeUser = async (userId) => {
 }
 
 // Regex for 8-100 characters containing a digit, a lowercase, an uppercase, and a non-word character
-const validPassword = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,100}/g
+// const validPassword = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,100}/g
 
 export const createUser = async ({ email, emailVerified = false, password, displayName, disabled = false }) => {
-  if (!isEmail(email)) throw Error(`${email} is not a valid email`)
-  else if (!validPassword.test(password)) throw Error(`Password should contain number, lowercase, uppercase, and a non-word character. Greater than 8 characters long.`)
+  // if (!isEmail(email)) throw Error(`${email} is not a valid email`)
+  // else if (!validPassword.test(password)) throw Error(`Password should contain number, lowercase, uppercase, and a non-word character. Greater than 8 characters long.`)
 
   // Will throw if email already in use
   const newUser = await app().auth().createUser({

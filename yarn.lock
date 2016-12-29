@@ -377,6 +377,12 @@ babel-plugin-check-es2015-constants@^6.3.13:
   dependencies:
     babel-runtime "^6.0.0"
 
+babel-plugin-inline-import:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/babel-plugin-inline-import/-/babel-plugin-inline-import-2.0.4.tgz#2afbc99ee8ced195709d36e633143962ca582e8f"
+  dependencies:
+    require-resolve "0.0.2"
+
 babel-plugin-syntax-async-functions@^6.8.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-6.13.0.tgz#cad9cad1191b5ad634bf30ae0872391e0647be95"
@@ -1078,6 +1084,10 @@ depd@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.0.tgz#e1bd82c6aab6ced965b97b88b17ed3e528ca18c3"
 
+deprecated-decorator@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/deprecated-decorator/-/deprecated-decorator-0.1.6.tgz#00966317b7a12fe92f3cc831f7583af329b86c37"
+
 destroy@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
@@ -1642,6 +1652,16 @@ graphql-server-express@^0.4.3:
 graphql-server-module-graphiql@^0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/graphql-server-module-graphiql/-/graphql-server-module-graphiql-0.4.3.tgz#f82b92b99bb1e1b4b285c86bf6fcfa60b3a7a805"
+
+graphql-tools:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-0.8.4.tgz#3cf4b2a650e0322b655ca274ec24914b608fb562"
+  dependencies:
+    deprecated-decorator "^0.1.6"
+    lodash "^4.3.0"
+    uuid "^3.0.1"
+  optionalDependencies:
+    typed-graphql "^1.0.2"
 
 graphql@^0.8.0:
   version "0.8.2"
@@ -2413,6 +2433,10 @@ parseurl@~1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/parseurl/-/parseurl-1.3.1.tgz#c8ab8c9223ba34888aa64a297b28853bec18da56"
 
+path-extra@^1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/path-extra/-/path-extra-1.0.3.tgz#7c112189a6e50d595790e7ad2037e44e410c1166"
+
 path-is-absolute@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
@@ -2690,6 +2714,12 @@ request@^2.79.0:
     tough-cookie "~2.3.0"
     tunnel-agent "~0.4.1"
     uuid "^3.0.0"
+
+require-resolve@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/require-resolve/-/require-resolve-0.0.2.tgz#bab410ab1aee2f3f55b79317451dd3428764e6f3"
+  dependencies:
+    x-path "^0.0.2"
 
 require-uncached@^1.0.2:
   version "1.0.3"
@@ -3071,7 +3101,7 @@ uuid@^2.0.1:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
-uuid@^3.0.0:
+uuid@^3.0.0, uuid@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
 
@@ -3143,6 +3173,12 @@ write@^0.2.1:
   resolved "https://registry.yarnpkg.com/write/-/write-0.2.1.tgz#5fc03828e264cea3fe91455476f7a3c566cb0757"
   dependencies:
     mkdirp "^0.5.1"
+
+x-path@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/x-path/-/x-path-0.0.2.tgz#294d076bb97a7706cc070bbb2a6fd8c54df67b12"
+  dependencies:
+    path-extra "^1.0.2"
 
 xdg-basedir@^2.0.0:
   version "2.0.0"

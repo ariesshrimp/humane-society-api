@@ -1,0 +1,9 @@
+# Extended by /users and /animals
+type Query {}
+# Extended by /users
+type Mutation {}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

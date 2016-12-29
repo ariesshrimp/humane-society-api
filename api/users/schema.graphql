@@ -1,0 +1,33 @@
+type User {
+  # List of animals this user has marked as a favorite
+  favorites: [Animal!]
+  # DB assigned UUID
+  id: ID!
+  # User chosen display name
+  name: String!
+}
+
+extend type Query {
+  # Get user by DB UUID
+  user(id: ID!): User
+}
+
+extend type Mutation {
+  # Add an animal to the user's list of favorites. Also add the user the animal's list of followers.
+  addFavorite(animalId: ID!, userId: ID!): User
+  # Add user to database and return the new user.
+  createUser(user: UserInput!): User
+  # Remove animal from user's favorites. Also removes user from animal's followers.
+  removeFavorite(animalId: ID!, userId: ID!): User
+  # Remove user from database, and return the user.
+  removeUser(userId: ID!): User
+}
+
+input UserInput {
+  # Must be valid email
+  email: String!
+  # Anything goes
+  name: String!
+  # > 8 characters, lowercase, uppercase, symbols, numbers
+  password: String!
+}

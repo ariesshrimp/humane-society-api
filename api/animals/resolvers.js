@@ -1,13 +1,39 @@
 'use strict'
 import * as Database from './data'
+import R from 'ramda'
+import { getByID } from '../users/data'
 
 export default {
-  getAllNamed: (_, { name }) => Database.getAllNamed(name),
-  getAllOfSex: (_, { sex }) => Database.getAllOfSex(sex),
-  getAllSpecies: (_, { species }) => Database.getAllSpecies(species),
-  getAnimal: (_, { id }) => Database.getByID(id),
-  getByBreed: (_, { breed }) => Database.getByBreed(breed),
-  getCheaperThan: (_, { maxPrice }) => Database.getCheaperThan(maxPrice),
-  getOlderThan: (_, { minAge }) => Database.getOlderThan(minAge),
-  getYoungerThan: (_, { maxAge }) => Database.getYoungerThan(maxAge)
+  Animal: {
+    followers ({ followers }) {
+      const follows = R.keys(followers)
+      return Promise.all(R.map(getByID, follows))
+    }
+  },
+  Query: {
+    animal (_, { id }) {
+      return Database.getByID(id)
+    },
+    animalsCheaperThan (_, { maxPrice }) {
+      return Database.getCheaperThan(maxPrice)
+    },
+    animalsNamed (_, { name }) {
+      return Database.getAllNamed(name)
+    },
+    animalsOfBreed (_, { breed }) {
+      return Database.getByBreed(breed)
+    },
+    animalsOfSex (_, { sex }) {
+      return Database.getAllOfSex(sex)
+    },
+    animalsOfSpecies (_, { species }) {
+      return Database.getAllSpecies(species)
+    },
+    animalsOlderThan (_, { minAge }) {
+      return Database.getOlderThan(minAge)
+    },
+    animalsYoungerThan (_, { maxAge }) {
+      return Database.getYoungerThan(maxAge)
+    }
+  }
 }

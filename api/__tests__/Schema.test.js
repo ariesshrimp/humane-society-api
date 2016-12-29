@@ -2,7 +2,7 @@
 import app from '../database'
 import R from 'ramda'
 import Resolvers from '../users/resolvers'
-import Schema from '../Schema'
+import executableSchema from '../'
 import uuid from 'node-uuid'
 import { expect } from 'chai'
 import { graphql } from 'graphql'
@@ -24,7 +24,7 @@ describe(`Schema`, function() {
     it(`Find an animal by ID`, async () => {
       const query = `
         query {
-          getAnimal(
+          animal(
             id:"${animalID}"
           ) {
             id

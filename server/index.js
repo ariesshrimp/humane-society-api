@@ -1,6 +1,6 @@
 'use strict'
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
-import Schema from '../api/Schema'
+import executableSchema from '../api'
 import express from 'express'
 import { json } from 'body-parser'
 import winston from 'winston'
@@ -41,7 +41,7 @@ server.use(`/graphiql`, json(), graphiqlExpress({
 
 server.use(`/graphql`, json(), graphqlExpress({
   formatError: winston.error,
-  schema: Schema
+  schema: executableSchema
 }))
 
 server.listen(PORT, () => {
