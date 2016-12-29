@@ -8,18 +8,19 @@ import { expect } from 'chai'
 import { graphql } from 'graphql'
 import * as TestObjects from './testObjects.js'
 
-describe(`Schema`, () => {
+describe(`Schema`, function() {
+  this.timeout(5000)
+
   // anima is used in Animal Operations tests and User Operations tests
   let animalID = `TEST_${uuid.v4()}`
   let testAnimal = R.merge(TestObjects.animal, { id: animalID })
-  let animalRef = app.database().ref(`/animals/${animalID}`)
+  let animalRef = app().database().ref(`/animals/${animalID}`)
 
   before(async function() {
-    this.timeout(5000)
     await animalRef.set(testAnimal)
   })
 
-  describe(`Animal operation`, () => { 
+  describe(`Animal operation`, () => {
     it(`Find an animal by ID`, async () => {
       const query = `
         query {
@@ -72,8 +73,8 @@ describe(`Schema`, () => {
       const mutation = `
         mutation {
           createUser(
-            email:"${uuid.v4()}@test.com", 
-            name:"TestGuy", 
+            email:"${uuid.v4()}@test.com",
+            name:"TestGuy",
             password:"12345678lowerUPPER&%*"
           ) {
             id
@@ -86,8 +87,8 @@ describe(`Schema`, () => {
       `
       const { data: { createUser: actual }} = await graphql(Schema, mutation)
       userID = actual.id // save this id for us in the rest of the user test suite
-      
-      const expected = { 
+
+      const expected = {
         id: userID,
         favorites: [],
         name: `TestGuy`
@@ -100,7 +101,7 @@ describe(`Schema`, () => {
       const mutation = `
         mutation {
           addFavorite(
-            animalId:"${animalID}", 
+            animalId:"${animalID}",
             userId:"${userID}"
           ) {
             id
@@ -115,11 +116,11 @@ describe(`Schema`, () => {
       `
       const { data: { addFavorite: actual }} = await graphql(Schema, mutation)
       const expected = {
-        id: userID, // return the user
-        favorites: [{ // with a list of faves
+        id: userID,     // return the user
+        favorites: [{   // with a list of faves
           id: animalID, // containing animal
           followers: [{ // who's followers include
-            id: userID // just this user
+            id: userID  // just this user
           }]
         }],
       }
