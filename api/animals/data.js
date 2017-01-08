@@ -1,91 +1,39 @@
+/**
+ * These functions contain the business logic that connects GraphQL resolver arguments
+ * to our contextual database choices.
+ * The database isntance is passed in via context at runtime,
+ * which allows these functions to be more idempotent,
+ * and makes testing much easier.
+ * Currently we use Neo4j Graph Database, so each function maps a behavior to a
+ * Cypher query, then returns the affected user peeled off of the Neo4j response
+ */
 'use strict'
 import R from 'ramda'
-import app from '../database'
-import { removeFavorite } from '../users/data'
 
-const data = app().database().ref(`/animals`)
+const records = R.prop('records')
+const first = R.compose(R.head, records)
 
-const unpack = R.compose(
-  R.values,
-  snapshot => snapshot.val()
-)
+export const animal = (session, id) => session.run(`
+  MATCH (a:Animal {id: {id}})
+  RETURN a
+`, { id })
+.then(first)
 
-// Read-only Operations
-// --------------------
-export const getByID = id => app().database().ref(`/animals/${id}`)
-  .once(`value`)
-  .then(snapshot => snapshot.val())
+export const animals = (session, prop, filter) => session.run(`
+  MATCH (a:Animal)
+  RETURN filter(animal IN a WHERE animal.{prop} = {filter})
+`, { filter, prop })
+.then(records)
 
-export const getAllSpecies = species => data.orderByChild(`species`)
-  .equalTo(species)
-  .once(`value`)
-  .then(unpack)
+export const followers = (session, id) => session.run(`
+  MATCH (a:Animal {id: {id}})<-[:IS_WATCHING]-(u:User)
+  RETURN collect(u) as followers
+`, { id })
+.then(records)
 
-export const getAllNamed = name => data.orderByChild(`name`)
-  .equalTo(name)
-  .once(`value`)
-  .then(unpack)
-
-export const getCheaperThan = maxPrice => data.orderByChild(`adopt_fee`)
-  .endAt(maxPrice)
-  .once(`value`)
-  .then(unpack)
-
-export const getAllOfSex = sex => data.orderByChild(`sex`)
-  .equalTo(sex)
-  .once(`value`)
-  .then(unpack)
-
-export const getYoungerThan = age => data.orderByChild(`age`)
-  .endAt(age)
-  .once(`value`)
-  .then(unpack)
-
-export const getOlderThan = age => data.orderByChild(`age`)
-  .startAt(age)
-  .once(`value`)
-  .then(unpack)
-
-export const getByBreed = breed => data.orderByChild(`breed`)
-  .equalTo(breed)
-  .once(`value`)
-  .then(unpack)
-
-// Mutative Operations
-// -------------------
-export const markAsFavorite = id => user => app().database().ref(`/animals/${id}`)
-  .once(`value`)
-  .then(snapshot => {
-    if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
-      return app().database()
-        .ref(`/animals/${id}/followers/${user}`)
-        .set(true) // mark this user as a follower
-    }
-  })
-
-export const unmarkAsFavorite = id => user => app().database().ref(`/animals/${id}`)
-  .once(`value`)
-  .then(snapshot => {
-    if (snapshot.val() !== null) { // check whether this animal actually exists, don't accidentally make one in place
-      return app().database()
-        .ref(`/animals/${id}/followers/${user}`)
-        .remove()
-    }
-  })
-
-/**
- * @description -
- *  remove an animal from the database, but first clean up all its other references
- * @param {string} animalId - uuid of animal
- * @return {promise} - promise to remove an animal from the database
- */
-export const removeAnimal = async (animalId) => {
-  const animal = await getByID(animalId)
-  const followers = R.keys(R.prop(`followers`)(animal))
-
-  // First remove this animal from any favorites lists it's on
-  await R.map(userId => removeFavorite(userId)(animalId), followers)
-
-  // Then destroy the animal
-  return app().database().ref(`animals/${animalId}`).remove()
-}
+export const removeAnimal = (session, id) => session.run(`
+  MATCH (a:Animal {id: {id}})<-[r:IS_WATCHING]-(:User)
+  DELETE (a, r)
+  RETURN a
+`, { id })
+.then(first)

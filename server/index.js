@@ -1,19 +1,9 @@
 'use strict'
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express'
 import Schema from '../api/Schema'
+import driver from '../database'
 import express from 'express'
 import { json } from 'body-parser'
-import winston from 'winston'
-
-winston.configure({
-  transports: [
-    new (winston.transports.Console)({
-      filename: `errors.json`,
-      json: true,
-      prettyPrint: true
-    })
-  ]
-})
 
 const PORT = 4000
 const server = express()
@@ -40,7 +30,8 @@ server.use(`/graphiql`, json(), graphiqlExpress({
 }))
 
 server.use(`/graphql`, json(), graphqlExpress({
-  formatError: winston.error,
+  context: { db: driver() },
+  formatError: console.error,
   schema: Schema
 }))
 

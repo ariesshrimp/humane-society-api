@@ -1,14 +1,16 @@
+/**
+ * GraphQL resolver functions are centralized here to make them
+ * more portable. This way they can be shared between mutations, queries, and entity definitions.
+ * Each function assumes the standard GraphQL resolver parameter pattern:
+ * (parentNode, arguments, context) => {}
+ */
 'use strict'
-import * as Database from './data'
+import * as Data from './data'
 
 export default {
-  addFavorite: (_, { userId, animalId }) => Database.addFavorite(userId)(animalId),
-  createUser: (_, { email, name, password }) => Database.createUser({
-    displayName: name,
-    email,
-    password
-  }),
-  getUser: (_, { id }) => Database.getByID(id),
-  removeFavorite: (_, { userId, animalId }) => Database.removeFavorite(userId)(animalId),
-  removeUser: (_, { userId }) => Database.removeUser(userId)
+  removeUser: (_, { id }, { db }) => Data.removeUser(db, id),
+  stopWatching: (_, { userID, animalID }, { db }) => Data.stopWatching(db, userID, animalID),
+  user: (_, { id }, { db }) => Data.user(db, id),
+  watch: (_, { userID, animalID }, { db }) => Data.watch(db, userID, animalID),
+  watching: ({ id }, _, { db }) => Data.watching(db, id)
 }

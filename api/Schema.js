@@ -3,6 +3,7 @@ import {
   GraphQLObjectType,
   GraphQLSchema
 } from 'graphql'
+import AnimalMutations from './animals/mutations'
 import AnimalQueries from './animals/queries'
 import R from 'ramda'
 import UserMutations from './users/mutations'
@@ -10,7 +11,7 @@ import UserQueries from './users/queries'
 
 export default new GraphQLSchema({
   mutation: new GraphQLObjectType({
-    fields: R.merge({}, UserMutations),
+    fields: R.merge(AnimalMutations, UserMutations),
     name: 'Mutation'
   }),
   query: new GraphQLObjectType({

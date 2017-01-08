@@ -5,17 +5,12 @@ import {
   GraphQLObjectType,
   GraphQLString
 } from 'graphql'
-import R from 'ramda'
+import Resolvers from './resolvers'
 import User from '../users/type'
-import { getByID } from '../users/data'
 
 export default new GraphQLObjectType({
   description: `An animal`,
   fields: () => ({
-    adopt_fee: {
-      description: `What does it cost to adopt this animal, in US dollars.`,
-      type: GraphQLFloat
-    },
     age: {
       description: `How old is this animal, number of months.`,
       type: GraphQLFloat
@@ -24,11 +19,11 @@ export default new GraphQLObjectType({
       description: `If this animal is commonly categorized within its species, how so?`,
       type: GraphQLString
     },
-    color: {
+    colors: {
       description: `A generic list of colors that best describe this animal.`,
       type: new GraphQLList(GraphQLString)
     },
-    date_available: {
+    dateAvailable: {
       description: `What is the earliest this animal can be adopted?`,
       type: GraphQLString
     },
@@ -36,19 +31,20 @@ export default new GraphQLObjectType({
       description: `A short paragraph or two from the humane society about this animal's personality.`,
       type: GraphQLString
     },
+    fee: {
+      description: `What does it cost to adopt this animal, in US dollars.`,
+      type: GraphQLFloat
+    },
     followers: {
       description: `A list of users that have marked this animal as a favorite`,
-      resolve: animal => Promise.all(
-        R.map(getByID,
-        R.keys(
-          R.prop(`followers`)(animal)))),
+      resolve: Resolvers.followers,
       type: new GraphQLList(User)
     },
     id: {
       description: `A unique identifier for this animal in the humane society database.`,
       type: GraphQLString
     },
-    image_url: {
+    imageURL: {
       description: `A URL to the entry image hosted by the humane society.`,
       type: GraphQLString
     },
