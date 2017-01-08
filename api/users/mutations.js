@@ -11,7 +11,7 @@ import User from './type'
 export default {
   removeUser: {
     args: {
-      userID: {
+      id: {
         description: `Unique ID of the target user.`,
         type: GraphQLString
       }

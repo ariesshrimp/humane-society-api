@@ -31,9 +31,27 @@ export const animals = (session, prop, value) => session.run(`
 `, { value })
 .then(_animals)
 
+export const createAnimal = (session, props) => session.run(`
+  MERGE (a:Animal {
+    age: {age},
+    breed: {breed},
+    colors: {colors},
+    dateAvailable: {dateAvailable},
+    description: {description},
+    fee: {fee},
+    id: {id},
+    imageURL: {imageURL},
+    name: {name},
+    sex: {sex},
+    species: {species},
+    weight: {weight}
+  })
+  RETURN a
+`, props).then(firstAnimal)
+
 export const removeAnimal = (session, id) => session.run(`
-  MATCH (a:Animal {id: {id}})<-[r:IS_WATCHING]-(:User)
-  DELETE (a, r)
+  MATCH (a:Animal {id: {id}})
+  DETACH DELETE a
   RETURN a
 `, { id })
 .then(firstAnimal)

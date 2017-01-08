@@ -23,9 +23,19 @@ export const user = (session, id) => session.run(`
   RETURN u
 `, { id }).then(_user)
 
+export const createUser = (session, props) => session.run(`
+  MERGE (u:User {
+    email: {email},
+    id: {id},
+    name: {name},
+    password: {password}
+  })
+  RETURN u
+`, props).then(_user)
+
 export const removeUser = (session, userID) => session.run(`
-  MATCH (u:User {id: {userID}})-[r:IS_WATCHING]->(a:Animal)
-  DELETE (r, u)
+  MATCH (u:User {id: {userID}})
+  DETACH DELETE u
   RETURN u
 `, { userID }).then(_user)
 
