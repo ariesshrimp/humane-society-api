@@ -9,7 +9,7 @@ import * as Data from './data'
 
 export default {
   animal: (_, { id }, { db }) => Data.animal(db, id),
-  animals: (_, { filter, prop }, { db }) => Data.animals(db, prop, filter),
+  animals: (_, { value, prop }, { db }) => Data.animals(db, prop, value),
   followers: ({ id }, _, { db }) => Data.followers(db, id),
   removeAnimal: (_, { id }, { db }) => Data.animals(db, id)
 }

@@ -10,30 +10,36 @@
 'use strict'
 import R from 'ramda'
 
+const get = key => record => record.get(key)
+const props = R.prop('properties')
 const records = R.prop('records')
 const first = R.compose(R.head, records)
+const _animal = R.compose(props, get('a'))
+const _animals = R.compose(R.map(_animal), records)
+const _users = R.compose(R.map(props), get('us'), first)
+const firstAnimal = R.compose(_animal, first)
 
 export const animal = (session, id) => session.run(`
   MATCH (a:Animal {id: {id}})
   RETURN a
 `, { id })
-.then(first)
+.then(firstAnimal)
 
-export const animals = (session, prop, filter) => session.run(`
-  MATCH (a:Animal)
-  RETURN filter(animal IN a WHERE animal.{prop} = {filter})
-`, { filter, prop })
-.then(records)
-
-export const followers = (session, id) => session.run(`
-  MATCH (a:Animal {id: {id}})<-[:IS_WATCHING]-(u:User)
-  RETURN collect(u) as followers
-`, { id })
-.then(records)
+export const animals = (session, prop, value) => session.run(`
+  MATCH (a:Animal {${prop}: {value}})
+  RETURN a
+`, { value })
+.then(_animals)
 
 export const removeAnimal = (session, id) => session.run(`
   MATCH (a:Animal {id: {id}})<-[r:IS_WATCHING]-(:User)
   DELETE (a, r)
   RETURN a
 `, { id })
-.then(first)
+.then(firstAnimal)
+
+export const followers = (session, id) => session.run(`
+  MATCH (a:Animal {id: {id}})<-[:IS_WATCHING]-(u:User)
+  RETURN collect(u) as us
+`, { id })
+.then(_users)

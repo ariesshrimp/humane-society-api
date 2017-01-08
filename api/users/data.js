@@ -13,9 +13,10 @@ import R from 'ramda'
 const get = key => record => record.get(key)
 const props = R.prop('properties')
 const records = R.prop('records')
-const animal = R.compose(props, get('a'))
-const animals = R.compose(R.map(animal), records)
-const _user = R.compose(props, get('u'), R.head, records)
+const first = R.compose(R.head, records)
+const _animal = R.compose(props, get('a'))
+const _animals = R.compose(R.map(_animal), records)
+const _user = R.compose(props, get('u'), first)
 
 export const user = (session, id) => session.run(`
   MATCH (u:User {id: {id}})
@@ -45,4 +46,4 @@ export const stopWatching = (session, userID, animalID) => session.run(`
 export const watching = (session, id) => session.run(`
   MATCH (u:User {id: {id}})-[:IS_WATCHING]->(a:Animal)
   RETURN a
-`, { id }).then(animals)
+`, { id }).then(_animals)
