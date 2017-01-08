@@ -17,28 +17,29 @@ const animal = R.compose(props, get('a'))
 const animals = R.compose(R.map(animal), records)
 const _user = R.compose(props, get('u'), R.head, records)
 
+export const user = (session, id) => session.run(`
+  MATCH (u:User {id: {id}})
+  RETURN u
+`, { id }).then(_user)
+
 export const removeUser = (session, userID) => session.run(`
   MATCH (u:User {id: {userID}})-[r:IS_WATCHING]->(a:Animal)
   DELETE (r, u)
   RETURN u
 `, { userID }).then(_user)
 
-export const stopWatching = (session, userID, animalID) => session.run(`
-  MATCH (u:User {id: {userID}})-[r:IS_WATCHING]->(a:Animal {id: {animalID}})
-  DELETE r
-  RETURN u
-`, { animalID, userID }).then(_user)
-
-export const user = (session, id) => session.run(`
-  MATCH (u:User {id: {id}})
-  RETURN u
-`, { id }).then(_user)
-
 export const watch = (session, userID, animalID) => session.run(`
   MATCH (u:User {id: {userID}})
   MATCH (a:Animal {id: {animalID}})
   MERGE (u)-[r:IS_WATCHING]->(a)
-  RETURN u
+  RETURN u, collect(r) as watching
+`, { animalID, userID }).then(_user)
+
+export const stopWatching = (session, userID, animalID) => session.run(`
+  MATCH (u:User {id: {userID}})-[r:IS_WATCHING]->(a:Animal {id: {animalID}})
+  DELETE r
+  MATCH (u)-[s:IS_WATCHING]->(:Animal)
+  RETURN u, collect(s) as watching
 `, { animalID, userID }).then(_user)
 
 export const watching = (session, id) => session.run(`
