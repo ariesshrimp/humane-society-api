@@ -14,10 +14,13 @@ const get = key => record => record.get(key)
 const props = R.prop('properties')
 const records = R.prop('records')
 const first = R.compose(R.head, records)
+const safe = func => R.tryCatch(func, R.always(null))
+
 const _animal = R.compose(props, get('a'))
-const _animals = R.compose(R.map(_animal), records)
-const _users = R.compose(R.map(props), get('us'), first)
-const firstAnimal = R.compose(_animal, first)
+const _animals = safe(R.compose(R.map(_animal), records))
+const _users = safe(R.compose(R.map(props), get('us'), first))
+
+const firstAnimal = safe(R.compose(_animal, first))
 
 export const animal = (session, id) => session.run(`
   MATCH (a:Animal {id: {id}})

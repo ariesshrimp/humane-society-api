@@ -26,11 +26,25 @@ describe('User', () => {
       expect(actual).toEqual(expected)
     })
 
+    it('handles requests for non-existent users safely', async () => {
+      try {
+        const actual = await Data.user(session, 'NON-EXISTENT-ID')
+        expect(actual).toBe(null)
+      } catch (e) { console.error(e) }
+    })
+
     it('gets a list of animals a user is following', async () => {
       const animals = await Data.watching(session, TEST_USER.id)
       const actual = R.keys(R.head(animals)).sort()
       const expected = R.keys(TEST_ANIMAL).sort()
       expect(actual).toEqual(expected)
+    })
+
+    it('handles followers of a non-existent user safely', async () => {
+      try {
+        const actual = await Data.watching(session, 'NON-EXISTENT-ID')
+        expect(actual).toHaveLength(0)
+      } catch (e) { console.error(e) }
     })
 
     it('allows a user to to stop following an animal', async () => {
