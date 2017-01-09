@@ -5,7 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "dev": "nodemon node_modules/.bin/babel-node server",
-    "lint": "eslint . --fix",
+    "lint": "eslint . --fix --ignore-path .gitignore",
     "start": "babel-node server/index.js",
     "test": "npm run lint && jest --forceExit",
     "test:watch": "jest --watch"
@@ -45,6 +45,8 @@
     "nodemon": "^1.11.0"
   },
   "jest": {
-    "testEnvironment": "node"
+    "collectCoverage": true,
+    "testEnvironment": "node",
+    "#": "https://facebook.github.io/jest/docs/configuration.html#coveragethreshold-object"
   }
 }
