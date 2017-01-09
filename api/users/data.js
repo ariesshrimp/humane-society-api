@@ -33,11 +33,11 @@ export const createUser = (session, props) => session.run(`
   RETURN u
 `, props).then(_user)
 
-export const removeUser = (session, userID) => session.run(`
-  MATCH (u:User {id: {userID}})
+export const removeUser = (session, id) => session.run(`
+  MATCH (u:User {id: {id}})
   DETACH DELETE u
   RETURN u
-`, { userID }).then(_user)
+`, { id }).then(_user)
 
 export const watch = (session, userID, animalID) => session.run(`
   MATCH (u:User {id: {userID}})

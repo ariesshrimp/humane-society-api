@@ -26,9 +26,10 @@ export const animal = (session, id) => session.run(`
 .then(firstAnimal)
 
 export const animals = (session, prop, value) => session.run(`
-  MATCH (a:Animal {${prop}: {value}})
+  MATCH (a:Animal)
+  WHERE a[{prop}] = {value}
   RETURN a
-`, { value })
+`, { prop, value })
 .then(_animals)
 
 export const createAnimal = (session, props) => session.run(`

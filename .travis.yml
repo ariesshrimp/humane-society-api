@@ -1,10 +1,40 @@
 language: node_js
-node_js: node - "7"
-script:
-- npm test
+node_js: 
+  - node
+  - "7"
+
+# https://github.com/neo4j/neo4j-javascript-driver/issues/66
+jdk:
+  - oraclejdk8
+
+# https://docs.travis-ci.com/user/trusty-ci-environment/#tl%3Bdr---Using-Trusty
+dist: trusty
+sudo: required
+
 cache:
   directories:
-  - $HOME/.yarn-cache
+    - $HOME/.yarn-cache
+
+env:
+  - NEO4J_VERSION="3.1.0"
+
+# https://github.com/travis-ci/travis-ci/issues/3243
 before_install:
-- openssl aes-256-cbc -K $encrypted_957f598f1ef5_key -iv $encrypted_957f598f1ef5_iv
-  -in config.firebase.json.enc -out api/config.firebase.json -d
+  - sudo apt-get update > /dev/null
+  - wget dist.neo4j.org/neo4j-community-3.1.0-unix.tar.gz
+  - tar -xzf neo4j-community-3.1.0-unix.tar.gz
+  - sudo ls neo4j-community-3.1.0
+  - neo4j-community-3.1.0/bin/neo4j start
+
+before_script:
+  # https://github.com/neo4j/neo4j-javascript-driver/issues/66
+  # need to change the password initially:
+  - curl -vX POST http://neo4j:neo4j@localhost:7474/user/neo4j/password -d"password=password"
+
+script:
+  - npm test
+
+# https://docs.travis-ci.com/user/notifications/#Email-notifications
+notifications:
+  email: false
+  

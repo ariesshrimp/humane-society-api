@@ -7,7 +7,7 @@
     "dev": "nodemon node_modules/.bin/babel-node server",
     "lint": "eslint . --fix",
     "start": "babel-node server/index.js",
-    "test": "npm run lint && jest",
+    "test": "npm run lint && jest --forceExit",
     "test:watch": "jest --watch"
   },
   "keywords": [
@@ -43,5 +43,8 @@
     "jest": "^18.1.0",
     "node-uuid": "^1.4.7",
     "nodemon": "^1.11.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
