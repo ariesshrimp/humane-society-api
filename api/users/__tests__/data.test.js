@@ -32,6 +32,23 @@ describe('User', () => {
       const expected = R.keys(TEST_ANIMAL).sort()
       expect(actual).toEqual(expected)
     })
+
+    it('allows a user to to stop following an animal', async () => {
+      try {
+        const actual = R.find((user) => user.id === TEST_USER.id)
+
+        // The user is in the list before
+        const followersBefore = await AnimalData.followers(session, TEST_ANIMAL.id)
+        expect(actual(followersBefore)).toBeDefined()
+
+        // Stop watching
+        await Data.stopWatching(session, TEST_USER.id, TEST_ANIMAL.id)
+
+        // The user is gone from the list
+        const followersAfter = await AnimalData.followers(session, TEST_ANIMAL.id)
+        expect(actual(followersAfter)).toBeUndefined()
+      } catch (e) { console.error(e) }
+    })
   })
 
   afterAll(async () => {

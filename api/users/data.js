@@ -47,10 +47,11 @@ export const watch = (session, userID, animalID) => session.run(`
 `, { animalID, userID }).then(_user)
 
 export const stopWatching = (session, userID, animalID) => session.run(`
-  MATCH (u:User {id: {userID}})-[r:IS_WATCHING]->(a:Animal {id: {animalID}})
+  MATCH (u:User {id: {userID}})
+  MATCH (a:Animal {id: {animalID}})
+  MATCH (u)-[r:IS_WATCHING]->(a)
   DELETE r
-  MATCH (u)-[s:IS_WATCHING]->(:Animal)
-  RETURN u, collect(s) as watching
+  RETURN u
 `, { animalID, userID }).then(_user)
 
 export const watching = (session, id) => session.run(`
