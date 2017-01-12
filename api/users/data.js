@@ -15,7 +15,11 @@ const props = R.prop('properties')
 const records = R.prop('records')
 const first = R.compose(R.head, records)
 const safe = func => R.tryCatch(func, R.always(null))
-
+// function log (v) {
+//   console.trace()
+//   console.log(v)
+//   return v
+// }
 const _animal = safe(R.compose(props, get('a')))
 const _user = safe(R.compose(props, get('u'), first))
 
@@ -39,17 +43,16 @@ export const createUser = (session, props) => session.run(`
 export const removeUser = (session, id) => session.run(`
   MATCH (u:User {id: {id}})
   DETACH DELETE u
-  RETURN u
-`, { id }).then(_user)
+`, { id }).then(R.always({ deleted: true, id })).catch(R.always({ deleted: false, id }))
 
-export const watch = (session, userID, animalID) => session.run(`
+export const follow = (session, userID, animalID) => session.run(`
   MATCH (u:User {id: {userID}})
   MATCH (a:Animal {id: {animalID}})
   MERGE (u)-[r:IS_WATCHING]->(a)
   RETURN u, collect(r) as watching
 `, { animalID, userID }).then(_user)
 
-export const stopWatching = (session, userID, animalID) => session.run(`
+export const unfollow = (session, userID, animalID) => session.run(`
   MATCH (u:User {id: {userID}})
   MATCH (a:Animal {id: {animalID}})
   MATCH (u)-[r:IS_WATCHING]->(a)
@@ -57,7 +60,7 @@ export const stopWatching = (session, userID, animalID) => session.run(`
   RETURN u
 `, { animalID, userID }).then(_user)
 
-export const watching = (session, id) => session.run(`
+export const following = (session, id) => session.run(`
   MATCH (u:User {id: {id}})-[:IS_WATCHING]->(a:Animal)
   RETURN a
 `, { id }).then(_animals)

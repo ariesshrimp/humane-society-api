@@ -5,15 +5,17 @@ import { testAnimal, testUser } from '../../../test-utilities'
 import R from 'ramda'
 import _session from '../../../database'
 
-describe('Animals', () => {
+xdescribe('Animals', () => {
   const TEST_ANIMAL = testAnimal()
   const TEST_USER = testUser()
   const session = _session()
   beforeAll(async () => {
     try {
-      await Data.createAnimal(session, TEST_ANIMAL)
-      await UserData.createUser(session, TEST_USER)
+      const a = await Data.createAnimal(session, TEST_ANIMAL)
+      const b = await UserData.createUser(session, TEST_USER)
       await UserData.watch(session, TEST_USER.id, TEST_ANIMAL.id)
+      console.log(a)
+      console.log(b)
     } catch (e) { console.error(e) }
   })
 

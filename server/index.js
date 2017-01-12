@@ -26,7 +26,15 @@ server.get(`/`, (request, response) => {
 })
 
 server.use(`/graphiql`, json(), graphiqlExpress({
-  endpointURL: `/graphql`
+  endpointURL: `/graphql`,
+  query: `mutation testSetup($u:UserInput, $a:AnimalInput) {
+  createUser(input: $u) {
+    name
+  }
+  createAnimal(input: $a) {
+    name
+  }
+}`
 }))
 
 server.use(`/graphql`, json(), graphqlExpress({

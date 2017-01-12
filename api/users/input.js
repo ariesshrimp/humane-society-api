@@ -1,25 +1,18 @@
+// This file defines GraphQL input types that are fed to mutations centered on Animals
 'use strict'
 import {
   GraphQLID,
-  GraphQLList,
+  GraphQLInputObjectType,
   GraphQLNonNull,
-  GraphQLObjectType,
   GraphQLString
 } from 'graphql'
-import Animal from '../animals/type'
-import Resolvers from './resolvers'
 
-export default new GraphQLObjectType({
+export default new GraphQLInputObjectType({
   description: `A user`,
   fields: () => ({
     email: {
       description: `The users's chosen email address.`,
       type: GraphQLString
-    },
-    following: {
-      description: `Animals this user is currently following.`,
-      resolve: Resolvers.following,
-      type: new GraphQLList(Animal)
     },
     id: {
       description: `A unique identifier for this user in the humane society database.`,
@@ -34,5 +27,5 @@ export default new GraphQLObjectType({
       type: new GraphQLNonNull(GraphQLString)
     }
   }),
-  name: `User`
+  name: `UserInput`
 })

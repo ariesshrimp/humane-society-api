@@ -1,10 +1,6 @@
+// This file defines GraphQL READ resolvers for Users
 'use strict'
-/**
- * This file defines GraphQL READ resolvers for Users
- */
-import {
-  GraphQLString
-} from 'graphql'
+import { GraphQLID, GraphQLNonNull } from 'graphql'
 import Resolvers from './resolvers'
 import User from './type'
 
@@ -13,7 +9,7 @@ export default {
     args: {
       id: {
         description: `Unique ID of desired user.`,
-        type: GraphQLString
+        type: new GraphQLNonNull(GraphQLID)
       }
     },
     resolve: Resolvers.user,

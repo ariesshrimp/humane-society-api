@@ -8,9 +8,10 @@
 import * as Data from './data'
 
 export default {
+  createUser: (_, props, { db }) => Data.createUser(db, props),
+  follow: (_, { userID, animalID }, { db }) => Data.follow(db, userID, animalID),
+  following: ({ id }, _, { db }) => Data.following(db, id),
   removeUser: (_, { id }, { db }) => Data.removeUser(db, id),
-  stopWatching: (_, { userID, animalID }, { db }) => Data.stopWatching(db, userID, animalID),
-  user: (_, { id }, { db }) => Data.user(db, id),
-  watch: (_, { userID, animalID }, { db }) => Data.watch(db, userID, animalID),
-  watching: ({ id }, _, { db }) => Data.watching(db, id)
+  unfollow: (_, { userID, animalID }, { db }) => Data.unfollow(db, userID, animalID),
+  user: (_, { id }, { db }) => Data.user(db, id)
 }

@@ -1,5 +1,6 @@
 'use strict'
 import {
+  GraphQLID,
   GraphQLList,
   GraphQLNonNull,
   GraphQLString
@@ -12,7 +13,7 @@ export default {
     args: {
       id: {
         description: `ID of animal`,
-        type: new GraphQLNonNull(GraphQLString)
+        type: new GraphQLNonNull(GraphQLID)
       }
     },
     resolve: Resolvers.animal,

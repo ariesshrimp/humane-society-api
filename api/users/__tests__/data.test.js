@@ -5,16 +5,19 @@ import { testAnimal, testUser } from '../../../test-utilities'
 import R from 'ramda'
 import _session from '../../../database'
 
-describe('User', () => {
+xdescribe('User', () => {
   const TEST_USER = testUser()
   const TEST_ANIMAL = testAnimal()
   const session = _session()
 
   beforeAll(async () => {
     try {
-      await Data.createUser(session, TEST_USER)
+      const u = await Data.createUser(session, TEST_USER)
       await AnimalData.createAnimal(session, TEST_ANIMAL)
       await Data.watch(session, TEST_USER.id, TEST_ANIMAL.id)
+      console.log('making', u)
+      // console.log(a)
+      // console.log(w)
     } catch (e) { console.error(e) }
   })
 
@@ -68,7 +71,8 @@ describe('User', () => {
   afterAll(async () => {
     try {
       await AnimalData.removeAnimal(session, TEST_ANIMAL.id)
-      await Data.removeUser(session, TEST_USER.id)
+      const u = await Data.removeUser(session, TEST_USER.id)
+      console.log('killing', u)
       session.close()
     } catch (e) { console.error(e) }
   })

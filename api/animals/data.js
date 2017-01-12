@@ -56,9 +56,8 @@ export const createAnimal = (session, props) => session.run(`
 export const removeAnimal = (session, id) => session.run(`
   MATCH (a:Animal {id: {id}})
   DETACH DELETE a
-  RETURN a
 `, { id })
-.then(firstAnimal)
+.then(R.always({ deleted: true, id })).catch(R.always({ deleted: false, id }))
 
 export const followers = (session, id) => session.run(`
   MATCH (a:Animal {id: {id}})<-[:IS_WATCHING]-(u:User)
