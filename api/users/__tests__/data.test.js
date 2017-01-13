@@ -5,19 +5,16 @@ import { testAnimal, testUser } from '../../../test-utilities'
 import R from 'ramda'
 import _session from '../../../database'
 
-xdescribe('User', () => {
+describe('User', () => {
   const TEST_USER = testUser()
   const TEST_ANIMAL = testAnimal()
   const session = _session()
 
   beforeAll(async () => {
     try {
-      const u = await Data.createUser(session, TEST_USER)
+      await Data.createUser(session, TEST_USER)
       await AnimalData.createAnimal(session, TEST_ANIMAL)
-      await Data.watch(session, TEST_USER.id, TEST_ANIMAL.id)
-      console.log('making', u)
-      // console.log(a)
-      // console.log(w)
+      await Data.follow(session, TEST_USER.id, TEST_ANIMAL.id)
     } catch (e) { console.error(e) }
   })
 
@@ -37,7 +34,7 @@ xdescribe('User', () => {
     })
 
     it('gets a list of animals a user is following', async () => {
-      const animals = await Data.watching(session, TEST_USER.id)
+      const animals = await Data.following(session, TEST_USER.id)
       const actual = R.keys(R.head(animals)).sort()
       const expected = R.keys(TEST_ANIMAL).sort()
       expect(actual).toEqual(expected)
@@ -45,7 +42,7 @@ xdescribe('User', () => {
 
     it('handles followers of a non-existent user safely', async () => {
       try {
-        const actual = await Data.watching(session, 'NON-EXISTENT-ID')
+        const actual = await Data.following(session, 'NON-EXISTENT-ID')
         expect(actual).toHaveLength(0)
       } catch (e) { console.error(e) }
     })
@@ -59,7 +56,7 @@ xdescribe('User', () => {
         expect(actual(followersBefore)).toBeDefined()
 
         // Stop watching
-        await Data.stopWatching(session, TEST_USER.id, TEST_ANIMAL.id)
+        await Data.unfollow(session, TEST_USER.id, TEST_ANIMAL.id)
 
         // The user is gone from the list
         const followersAfter = await AnimalData.followers(session, TEST_ANIMAL.id)
@@ -71,8 +68,7 @@ xdescribe('User', () => {
   afterAll(async () => {
     try {
       await AnimalData.removeAnimal(session, TEST_ANIMAL.id)
-      const u = await Data.removeUser(session, TEST_USER.id)
-      console.log('killing', u)
+      await Data.removeUser(session, TEST_USER.id)
       session.close()
     } catch (e) { console.error(e) }
   })

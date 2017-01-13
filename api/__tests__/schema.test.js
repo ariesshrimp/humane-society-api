@@ -9,7 +9,7 @@ describe('Animals', () => {
   const session = _session()
   const gql = query => graphql(Schema, query, null, { db: session })
 
-  describe('can create', () => {
+  describe('can create...', () => {
     it('Users', async () => {
       try {
         const mutation = `mutation {
@@ -88,7 +88,15 @@ describe('Animals', () => {
 
   })
 
-  xit('lets a user ask for other followers of a user', async () => {
+  xit('lets a user UNfollow an animal', async () => {
+
+  })
+
+  xit('lets a user follow many animals', async () => {
+
+  })
+
+  xit('lets a user ask who else is following an animal', async () => {
 
   })
 

@@ -1,6 +1,7 @@
 'use strict'
-import { HOST, PASSWORD, PORT, USER } from './config'
+import config from '../config'
 import { v1 as neo4j } from 'neo4j-driver'
+const { HOST, PASSWORD, PORT, USER } = config.default
 
 let _driver
 export function driver () {

@@ -1,7 +1,6 @@
 language: node_js
 node_js: 
   - node
-  - "7"
 
 # https://github.com/neo4j/neo4j-javascript-driver/issues/66
 jdk:
@@ -17,6 +16,7 @@ cache:
 
 env:
   - NEO4J_VERSION="3.1.0"
+  - NODE_ENV="testing"
 
 # https://github.com/travis-ci/travis-ci/issues/3243
 before_install:
@@ -33,6 +33,9 @@ before_script:
 
 script:
   - npm test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 # https://docs.travis-ci.com/user/notifications/#Email-notifications
 notifications:

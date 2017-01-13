@@ -4,11 +4,11 @@
   "description": "GraphQL API to consume scraped data from the Oregon Humane Society.",
   "main": "server/index.js",
   "scripts": {
-    "dev": "nodemon node_modules/.bin/babel-node server",
+    "dev": "NODE_ENV=development nodemon node_modules/.bin/babel-node server",
     "lint": "eslint . --fix --ignore-path .gitignore",
-    "start": "babel-node server/index.js",
-    "test": "npm run lint && jest --forceExit",
-    "test:watch": "jest --watch"
+    "start": "NODE_ENV=production babel-node server/index.js",
+    "test": "NODE_ENV=testing npm run lint && jest --forceExit --config ./jestCoverage.config.json",
+    "test:watch": "jest --watch --config ./jest.config.json"
   },
   "keywords": [
     "graphql",
@@ -43,10 +43,5 @@
     "jest": "^18.1.0",
     "node-uuid": "^1.4.7",
     "nodemon": "^1.11.0"
-  },
-  "jest": {
-    "collectCoverage": true,
-    "testEnvironment": "node",
-    "#": "https://facebook.github.io/jest/docs/configuration.html#coveragethreshold-object"
   }
 }
