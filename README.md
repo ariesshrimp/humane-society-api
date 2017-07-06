@@ -3,6 +3,8 @@
 
 
 # Oregon Humane Society API
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/joefraley/humane-society-api.svg)](https://greenkeeper.io/)
 A GraphQL API for data about animals sheltered at the Oregon Humane Society.
 
 ## Running
